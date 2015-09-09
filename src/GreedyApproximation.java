@@ -1,33 +1,21 @@
-
+import Library.*;
 public class GreedyApproximation {
 	int V;
-	int [][] graph;
+	double [][] graph;
 	int[] hamiltonian;
-	int hamiltonian_index;
+	int hamiltonian_index;	// index for hamiltonian array
 	
-	public GreedyApproximation(int [][] graph, int V) {
+	public GreedyApproximation(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
 		this.graph = graph;
 		this.V = V;
 		hamiltonian = new int[V+1];
 		hamiltonian_index = 0;
+		Prim prim = new Prim(graph,V);
+		printMST(prim.primMST());
+		
 	}
-
-	// A utility function to find the vertex with minimum key value, from
-	// the set of vertices not yet included in MST
-	int minKey(int key[], boolean mstSet[]) {
-		// Initialize min value
-		int min = Integer.MAX_VALUE, min_index = 0;
-
-		for (int v = 0; v < V; v++)
-			if (mstSet[v] == false && key[v] < min) {
-				min = key[v];
-				min_index = v;
-			}
-
-		return min_index;
-	}
-
+	
 	void preOrder(int root, int parent[]) {
 		//System.out.println(hamiltonian_index);
 		hamiltonian[hamiltonian_index++] = root;
@@ -43,77 +31,26 @@ public class GreedyApproximation {
 
 	}
 	
-	int tspCost() {
-		int cost = 0;
+	double tspCost() {
+		double cost = 0;
 		for (int i = 0; i < V; i++) {
 			cost += graph[hamiltonian[i]][hamiltonian[i+1]];
 		}
 		return cost;
 	}
-
-	// A utility function to print the constructed MST stored in parent[]
+	
 	void printMST(int parent[]) {
-		System.out.println("Edge   Weight");
+		System.out.println("Edge Weight");
 		for (int i = 1; i < V; i++)
-			System.out.printf("%d - %d    %d \n", parent[i], i, graph[i][parent[i]]);
+			System.out.printf("%d - %d    %f \n", parent[i], i, graph[i][parent[i]]);
 		preOrder(0, parent);
 		hamiltonian[hamiltonian_index] = 0;
 		System.out.println("--- TSP Cycle --- ");
 		for (int i = 0; i <= V; i++)
 			System.out.print(hamiltonian[i] + " ");
 		System.out.println();
-		System.out.println("Cost: " + tspCost());
+		System.out.println("Cost: " + Main.two.format(tspCost()));
 
-	}
-
-	// Function to construct and print MST for a graph represented using
-	// adjacency
-	// matrix representation
-	void primMST() {
-		int[] parent = new int[V]; // Array to store constructed MST
-		int[] key = new int[V]; // Key values used to pick minimum weight edge
-								// in cut
-		boolean[] mstSet = new boolean[V]; // To represent set of vertices not
-											// yet included in MST
-
-		// Initialize all keys as INFINITE
-		for (int i = 0; i < V; i++) {
-			key[i] = Integer.MAX_VALUE;
-			mstSet[i] = false;
-
-		}
-
-		// Always include first 1st vertex in MST.
-		key[0] = 0; // Make key 0 so that this vertex is picked as first vertex
-		parent[0] = -1; // First node is always root of MST
-
-		// The MST will have V vertices
-		for (int count = 0; count < V - 1; count++) {
-			// Pick the minimum key vertex from the set of vertices
-			// not yet included in MST
-			int u = minKey(key, mstSet);
-
-			// Add the picked vertex to the MST Set
-			mstSet[u] = true;
-
-			// Update key value and parent index of the adjacent vertices of
-			// the picked vertex. Consider only those vertices which are not yet
-			// included in MST
-			for (int v = 0; v < V; v++)
-
-				// graph[u][v] is non zero only for adjacent vertices of m
-				// mstSet[v] is false for vertices not yet included in MST
-				// Update the key only if graph[u][v] is smaller than key[v]
-				if (graph[u][v] > 0 && mstSet[v] == false && graph[u][v] < key[v]) {
-					parent[v] = u;
-					key[v] = graph[u][v];
-				}
-
-		}
-
-		// print the constructed MST
-		System.out.println("--- MST ---");
-		printMST(parent);
 	}
 
 
