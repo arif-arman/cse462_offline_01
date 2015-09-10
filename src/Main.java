@@ -1,3 +1,6 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +9,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.Scanner;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import Graphs.*;
 
 public class Main {
 	
@@ -99,6 +108,10 @@ public class Main {
 				double stopTime = System.nanoTime();
 				elapsedTime += (stopTime - startTime) / 1000000;
 				System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				if (k==0 && elapsedTime >= 5000 && V>=13) {
+					elapsedTime = elapsedTime * 3;
+					break;
+				}
 			}
 			elapsedTime /= 3;
 			System.out.println("Time : " + two.format(elapsedTime) + "ms");
@@ -127,6 +140,7 @@ public class Main {
 			double gacost = 0;
 			System.out.println("--- Greedy Approximation ---");
 			elapsedTime = 0;
+			int [] hamiltonian = null;
 			for(int k=0;k<3;k++) {
 				double startTime = System.nanoTime();				
 				GreedyApproximation ga = new GreedyApproximation(graph,V);
@@ -134,6 +148,7 @@ public class Main {
 				elapsedTime += (stopTime - startTime) / 1000000;
 				gacost += ga.getTotalCost();
 				System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				hamiltonian = ga.getHamiltonian();
 			}
 			elapsedTime /= 3;
 			gacost /= 3;
@@ -141,6 +156,7 @@ public class Main {
 			gapx.printf("%d \t %.4f\n", V, elapsedTime);
 		
 			ratio.printf("%.4f\t%.4f\n", bbcost, gacost);
+			drawGraph(X,Y,hamiltonian,V);
 			//}
 			//userInput.close();
 			if (++counter > 10) {
@@ -156,5 +172,70 @@ public class Main {
 
 		
 
+	}
+	static void drawGraph(double [] X, double [] Y, int [] hamiltonian, int V) {
+		JFrame testFrame = new JFrame("Graph with Number of Vertices: " + V);
+		testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		final LinesComponent comp = new LinesComponent();
+		comp.setPreferredSize(new Dimension(600, 400));
+		testFrame.getContentPane().add(comp, BorderLayout.CENTER);
+		
+		double maxX = -1;
+		for(int i=0;i<V;i++) {
+			if (X[i] > maxX) maxX = X[i];
+		}
+		int scaleX = (int)(600/maxX);
+		double maxY = -1;
+		for(int i=0;i<V;i++) {
+			if (Y[i] > maxY) maxY = Y[i];
+		}
+		int scaleY = (int)(400/maxY);
+		//System.out.println(scaleX + " " + scaleY);
+		for(int i=0;i<V;i++) {
+			X[i] *= scaleX;
+			Y[i] *= scaleY;
+			//System.out.println(X[i] + " " + Y[i]);
+		}
+		
+		for (int i = 0; i < V; i++) {
+			for (int j = i+1; j < V; j++) {
+				//System.out.println(X[i] + " " + Y[i] + " " + X[j] + " " + Y[j]);
+				comp.addLine((int)X[i], (int)Y[i], (int)X[j], (int)Y[j], Color.BLUE);
+			}
+		}
+		
+		testFrame.pack();
+		testFrame.setVisible(true);
+		JOptionPane pane = new JOptionPane("Graph with " + V + " vertices");
+		JDialog dialog = pane.createDialog(null, "Message");
+		dialog.setLocation(700, 0);
+		dialog.setVisible(true);
+		
+		//for(int i=0;i<V+1;i++) System.out.print(hamiltonian[i] + " ");
+		
+		for (int i = 0; i < V-1; i++) {
+			//System.out.println(X[hamiltonian[i]] + " " + Y[hamiltonian[i]] + " " + X[hamiltonian[i+1]] + " " + Y[hamiltonian[i+1]]);
+			comp.addLine((int)X[hamiltonian[i]], (int)Y[hamiltonian[i]], (int)X[hamiltonian[i+1]], (int)Y[hamiltonian[i+1]], Color.RED);
+	
+		}
+		testFrame.pack();
+		testFrame.setVisible(true);
+		pane = new JOptionPane("MST");
+		dialog = pane.createDialog(null, "Message");
+		dialog.setLocation(700, 0);
+		dialog.setVisible(true);
+		for (int i = 0; i < V; i++) {
+			//System.out.println(X[hamiltonian[i]] + " " + Y[hamiltonian[i]] + " " + X[hamiltonian[i+1]] + " " + Y[hamiltonian[i+1]]);
+			comp.addLine((int)X[hamiltonian[i]], (int)Y[hamiltonian[i]], (int)X[hamiltonian[i+1]], (int)Y[hamiltonian[i+1]], Color.GREEN);
+	
+		}
+		
+		testFrame.pack();
+		testFrame.setVisible(true);
+		pane = new JOptionPane("TSP Circuit");
+		dialog = pane.createDialog(null, "Message");
+		dialog.setLocation(700, 0);
+		dialog.setVisible(true);
+		testFrame.dispose();
 	}
 }

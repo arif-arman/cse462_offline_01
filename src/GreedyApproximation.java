@@ -58,6 +58,10 @@ public class GreedyApproximation {
 	public double getTotalCost() {
 		return totalCost;
 	}
+	
+	public int [] getHamiltonian() {
+		return hamiltonian;
+	}
 
 
 }
