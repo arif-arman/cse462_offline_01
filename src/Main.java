@@ -17,11 +17,12 @@ public class Main {
 		double [] X = null;			// x co-ordinates of points
 		double [] Y = null;			// y co-ordinates of points
 		
-		PrintWriter exp = null, bnb = null, gapx = null;
+		PrintWriter exp = null, bnb = null, gapx = null, ratio = null;
 		try {
 			exp = new PrintWriter(new BufferedWriter(new FileWriter("outputs/exponential.txt", false)));
 			bnb = new PrintWriter(new BufferedWriter(new FileWriter("outputs/branch&bound.txt", false)));
 			gapx = new PrintWriter(new BufferedWriter(new FileWriter("outputs/greedyapproximation.txt", false)));
+			ratio = new PrintWriter(new BufferedWriter(new FileWriter("outputs/approxratio.txt", false)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,52 +89,58 @@ public class Main {
 			//int choice = userInput.nextInt();
 			//if (choice == 1) 
 			
-			{	
 				
-				System.out.println("--- Exact Exponentiation ---");
-				double elapsedTime = 0;
-				for(int k=0;k<3;k++) {
-					double startTime = System.nanoTime();
-					ExactExponential ee = new ExactExponential(graph, V);
-					double stopTime = System.nanoTime();
-					elapsedTime += (stopTime - startTime) / 1000000;
-					System.out.println("Time : " + two.format(elapsedTime) + "ms");
-				}
-				elapsedTime /= 3;
+			
+			System.out.println("--- Exact Exponentiation ---");
+			double elapsedTime = 0;
+			for(int k=0;k<3;k++) {
+				double startTime = System.nanoTime();
+				ExactExponential ee = new ExactExponential(graph, V);
+				double stopTime = System.nanoTime();
+				elapsedTime += (stopTime - startTime) / 1000000;
 				System.out.println("Time : " + two.format(elapsedTime) + "ms");
-				exp.printf("%d \t %.4f\n", V, elapsedTime);
 			}
+			elapsedTime /= 3;
+			System.out.println("Time : " + two.format(elapsedTime) + "ms");
+			exp.printf("%d \t %.4f\n", V, elapsedTime);
+		
 			//else if (choice == 2)
-			{
-				System.out.println("--- Branch & Bounding ---");
-				double elapsedTime = 0;
-				for(int k=0;k<3;k++) {
-					double startTime = System.nanoTime();
-					BranchBounding bb = new BranchBounding(graph, V);
-					double stopTime = System.nanoTime();
-					elapsedTime += (stopTime - startTime) / 1000000;
-					System.out.println("Time : " + two.format(elapsedTime) + "ms");
-				}
-				elapsedTime /= 3;
+			double bbcost = 0;
+			System.out.println("--- Branch & Bounding ---");
+			elapsedTime = 0;
+			for(int k=0;k<3;k++) {
+				double startTime = System.nanoTime();
+				BranchBounding bb = new BranchBounding(graph, V);
+				double stopTime = System.nanoTime();
+				elapsedTime += (stopTime - startTime) / 1000000;
+				bbcost += bb.getMinCost();
 				System.out.println("Time : " + two.format(elapsedTime) + "ms");
-				bnb.printf("%d \t %.4f\n", V, elapsedTime);
 			}
+			elapsedTime /= 3;
+			bbcost /= 3;
+			System.out.println("Time : " + two.format(elapsedTime) + "ms");
+			bnb.printf("%d \t %.4f\n", V, elapsedTime);
+		
 			//else if (choice == 3) 
-			{
-				// for measuring time complexity
-				System.out.println("--- Greedy Approximation ---");
-				double elapsedTime = 0;
-				for(int k=0;k<3;k++) {
-					double startTime = System.nanoTime();				
-					GreedyApproximation ga = new GreedyApproximation(graph,V);
-					double stopTime = System.nanoTime();
-					elapsedTime += (stopTime - startTime) / 1000000;
-					System.out.println("Time : " + two.format(elapsedTime) + "ms");
-				}
-				elapsedTime /= 3;
+		
+			// for measuring time complexity
+			double gacost = 0;
+			System.out.println("--- Greedy Approximation ---");
+			elapsedTime = 0;
+			for(int k=0;k<3;k++) {
+				double startTime = System.nanoTime();				
+				GreedyApproximation ga = new GreedyApproximation(graph,V);
+				double stopTime = System.nanoTime();
+				elapsedTime += (stopTime - startTime) / 1000000;
+				gacost += ga.getTotalCost();
 				System.out.println("Time : " + two.format(elapsedTime) + "ms");
-				gapx.printf("%d \t %.4f\n", V, elapsedTime);
 			}
+			elapsedTime /= 3;
+			gacost /= 3;
+			System.out.println("Time : " + two.format(elapsedTime) + "ms");
+			gapx.printf("%d \t %.4f\n", V, elapsedTime);
+		
+			ratio.printf("%.4f\t%.4f\n", bbcost, gacost);
 			//}
 			//userInput.close();
 			if (++counter > 10) {
@@ -145,6 +152,7 @@ public class Main {
 		exp.close();
 		bnb.close();
 		gapx.close();
+		ratio.close();
 
 		
 

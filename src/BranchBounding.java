@@ -126,6 +126,10 @@ public class BranchBounding {
 		//System.out.println("Lower Bound: " + bound);
 		return bound;
 	}
+	
+	public double getMinCost() {
+		return minCost;
+	}
 
 
 }

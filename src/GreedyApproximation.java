@@ -4,6 +4,7 @@ public class GreedyApproximation {
 	double [][] graph;
 	int[] hamiltonian;
 	int hamiltonian_index;	// index for hamiltonian array
+	double totalCost;
 	
 	public GreedyApproximation(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
@@ -49,8 +50,13 @@ public class GreedyApproximation {
 		for (int i = 0; i <= V; i++)
 			System.out.print(hamiltonian[i] + " ");
 		System.out.println();
-		System.out.println("Cost: " + Main.two.format(tspCost()));
+		totalCost = tspCost();
+		System.out.println("Cost: " + Main.two.format(totalCost));
 
+	}
+	
+	public double getTotalCost() {
+		return totalCost;
 	}
 
 
