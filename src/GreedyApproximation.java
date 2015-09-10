@@ -40,12 +40,12 @@ public class GreedyApproximation {
 	}
 	
 	void printMST(int parent[]) {
-		System.out.println("Edge Weight");
-		for (int i = 1; i < V; i++)
-			System.out.printf("%d - %d    %f \n", parent[i], i, graph[i][parent[i]]);
+		//System.out.println("Edge Weight");
+		//for (int i = 1; i < V; i++)
+			//System.out.printf("%d - %d    %f \n", parent[i], i, graph[i][parent[i]]);
 		preOrder(0, parent);
 		hamiltonian[hamiltonian_index] = 0;
-		System.out.println("--- TSP Cycle --- ");
+		System.out.println("--- TSP --- ");
 		for (int i = 0; i <= V; i++)
 			System.out.print(hamiltonian[i] + " ");
 		System.out.println();

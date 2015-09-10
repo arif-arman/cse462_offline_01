@@ -8,9 +8,12 @@ public class ExactExponential {
 	double [][] graph;
 	double minCost;	
 	List<Integer> minTSP;	// final TSP
+	double start;
+	double check;
 
 	public ExactExponential(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
+		start = System.currentTimeMillis();
 		this.V = V;
 		this.graph = graph;
 		minCost = Integer.MAX_VALUE;
@@ -19,14 +22,19 @@ public class ExactExponential {
 		for (int i = 1; i < V; i++) {
 			list.add(i);
 		}
-		permute(list, 0);
-		System.out.println("--- TSP ---");
-		System.out.print(0 + " ");
-		for (int i = 0; i < minTSP.size(); i++) {
-			System.out.print(minTSP.get(i) + " ");
+		if (permute(list, 0)) {
+			System.out.println("--- TSP ---");
+			System.out.print(0 + " ");
+			for (int i = 0; i < minTSP.size(); i++) {
+				System.out.print(minTSP.get(i) + " ");
+			}
+			System.out.println(0);
+			System.out.println("Cost : " + Main.two.format(minCost));
+			
 		}
-		System.out.println(0);
-		System.out.println("Cost : " + Main.two.format(minCost));
+		else {
+			System.out.println("No solution found in 5s");
+		}
 		
 	}
 	
@@ -34,12 +42,18 @@ public class ExactExponential {
 	 * generate all permutation of list
 	 */
 		
-	void permute(List<Integer> arr, int k) {
+	boolean permute(List<Integer> arr, int k) {
+		check = System.currentTimeMillis();
+		if (check - start > 5000) return false;
+		boolean flag = true;
 		for (int i = k; i < arr.size(); i++) {
 			//System.out.println(arr);
 			java.util.Collections.swap(arr, i, k);
-			permute(arr, k + 1);
-			java.util.Collections.swap(arr, k, i);
+			if (permute(arr, k + 1)) {
+				java.util.Collections.swap(arr, k, i);
+				flag = true;
+			}
+			else flag = false;
 		}
 		if (k == arr.size() - 1) {
 			//System.out.println(Arrays.toString(arr.toArray()));
@@ -51,6 +65,7 @@ public class ExactExponential {
 				minTSP.addAll(arr);
 			}
 		}
+		return flag;
 	}
 	
 	/*

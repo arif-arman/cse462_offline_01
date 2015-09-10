@@ -76,7 +76,6 @@ public class Prim {
 		}
 
 		// print the constructed MST
-		System.out.println("--- MST ---");
 		return parent;
 	}
 }

@@ -1,5 +1,9 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
@@ -13,13 +17,23 @@ public class Main {
 		double [] X = null;			// x co-ordinates of points
 		double [] Y = null;			// y co-ordinates of points
 		
+		PrintWriter exp = null, bnb = null, gapx = null;
+		try {
+			exp = new PrintWriter(new BufferedWriter(new FileWriter("outputs/exponential.txt", false)));
+			bnb = new PrintWriter(new BufferedWriter(new FileWriter("outputs/branch&bound.txt", false)));
+			gapx = new PrintWriter(new BufferedWriter(new FileWriter("outputs/greedyapproximation.txt", false)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		// TODO Auto-generated method stub
 		
 		int counter = 0;
-		File file = new File("input.txt");
+		File file = new File("inputs/input.txt");
 		while(true) {
 			if (counter > 0) {
-				file = new File("input" + counter +".txt");
+				file = new File("inputs/input" + counter +".txt");
 			}
 			Scanner input = null;
 			try {
@@ -55,8 +69,11 @@ public class Main {
 			
 			// file input ends
 			
-			// display adj matrix
+			// output streams initialization
 			
+			
+			// display adj matrix
+			System.out.println("n : " + V );
 			System.out.println("--- Adjacency Matrix ---");
 			for (int i = 0; i < V; i++) {
 				for (int j = 0; j < V; j++) {
@@ -71,37 +88,63 @@ public class Main {
 			//int choice = userInput.nextInt();
 			//if (choice == 1) 
 			
-			{
-			//	double startTime = System.nanoTime();
-				//ExactExponential ee = new ExactExponential(graph, V);
-				//double stopTime = System.nanoTime();
-				//double elapsedTime = (stopTime - startTime) / 1000000;
-				//System.out.println("Time " + two.format(elapsedTime) + "ms");
+			{	
+				
+				System.out.println("--- Exact Exponentiation ---");
+				double elapsedTime = 0;
+				for(int k=0;k<3;k++) {
+					double startTime = System.nanoTime();
+					ExactExponential ee = new ExactExponential(graph, V);
+					double stopTime = System.nanoTime();
+					elapsedTime += (stopTime - startTime) / 1000000;
+					System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				}
+				elapsedTime /= 3;
+				System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				exp.printf("%d \t %.4f\n", V, elapsedTime);
 			}
 			//else if (choice == 2)
 			{
-				double startTime = System.nanoTime();
-				BranchBounding bb = new BranchBounding(graph, V);
-				double stopTime = System.nanoTime();
-				double elapsedTime = (stopTime - startTime) / 1000000;
-				System.out.println("Time " + two.format(elapsedTime) + "ms");
+				System.out.println("--- Branch & Bounding ---");
+				double elapsedTime = 0;
+				for(int k=0;k<3;k++) {
+					double startTime = System.nanoTime();
+					BranchBounding bb = new BranchBounding(graph, V);
+					double stopTime = System.nanoTime();
+					elapsedTime += (stopTime - startTime) / 1000000;
+					System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				}
+				elapsedTime /= 3;
+				System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				bnb.printf("%d \t %.4f\n", V, elapsedTime);
 			}
 			//else if (choice == 3) 
 			{
 				// for measuring time complexity
-			//	double startTime = System.nanoTime();				
-			//	GreedyApproximation ga = new GreedyApproximation(graph,V);
-			//	double stopTime = System.nanoTime();
-			//	double elapsedTime = (stopTime - startTime) / 1000000;
-			//	System.out.println("Time " + two.format(elapsedTime) + "ms");
+				System.out.println("--- Greedy Approximation ---");
+				double elapsedTime = 0;
+				for(int k=0;k<3;k++) {
+					double startTime = System.nanoTime();				
+					GreedyApproximation ga = new GreedyApproximation(graph,V);
+					double stopTime = System.nanoTime();
+					elapsedTime += (stopTime - startTime) / 1000000;
+					System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				}
+				elapsedTime /= 3;
+				System.out.println("Time : " + two.format(elapsedTime) + "ms");
+				gapx.printf("%d \t %.4f\n", V, elapsedTime);
 			}
 			//}
 			//userInput.close();
-			if (++counter > 0) {
+			if (++counter > 10) {
 				break;
 			}
 			System.out.println();
+			System.out.println();
 		}
+		exp.close();
+		bnb.close();
+		gapx.close();
 
 		
 
