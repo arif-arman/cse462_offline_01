@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ExactExponential {
+public class ExactExponential_1005046 {
 	int V;
 	double [][] graph;
 	double minCost;	
@@ -11,7 +11,7 @@ public class ExactExponential {
 	double start;
 	double check;
 
-	public ExactExponential(double [][] graph, int V) {
+	public ExactExponential_1005046(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
 		start = System.currentTimeMillis();
 		this.V = V;
@@ -29,7 +29,7 @@ public class ExactExponential {
 				System.out.print(minTSP.get(i) + " ");
 			}
 			System.out.println(0);
-			System.out.println("Cost : " + Main.two.format(minCost));
+			System.out.println("Cost : " + Main_1005046.two.format(minCost));
 			
 		}
 		else {

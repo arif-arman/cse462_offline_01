@@ -1,9 +1,9 @@
 package Library;
 
-public class Prim {
+public class Prim_1005046 {
 	double [][] graph;
 	int V;
-	public Prim(double [][] graph, int V) {
+	public Prim_1005046(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
 		this.graph = graph;
 		this.V = V;

@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
-import Library.Prim;
+import Library.Prim_1005046;
 
-public class BranchBounding {
+public class BranchBounding_1005046 {
 	int V;
 	double [][] graph;
 	int [] vertices;
@@ -12,7 +12,7 @@ public class BranchBounding {
 	double minCost;
 	ArrayList<Integer> minTSP;
 	
-	public BranchBounding(double [][] graph, int V) {
+	public BranchBounding_1005046(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
 		this.graph = graph;
 		this.V = V;
@@ -26,7 +26,7 @@ public class BranchBounding {
 			System.out.print(minTSP.get(i) + " ");
 		}
 		System.out.println(0);
-		System.out.println("Cost : " + Main.two.format(minCost));
+		System.out.println("Cost : " + Main_1005046.two.format(minCost));
 	}
 	
 	void TSP(int v) {
@@ -98,7 +98,7 @@ public class BranchBounding {
 					System.out.println();
 				}
 				*/
-				Prim prim = new Prim(subgraph, size);
+				Prim_1005046 prim = new Prim_1005046(subgraph, size);
 				int [] parent = prim.primMST();
 				double mstCost = 0;
 				for (int i = 1; i < size; i++) {

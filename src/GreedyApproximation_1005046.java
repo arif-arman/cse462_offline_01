@@ -1,18 +1,18 @@
 import Library.*;
-public class GreedyApproximation {
+public class GreedyApproximation_1005046 {
 	int V;
 	double [][] graph;
 	int[] hamiltonian;
 	int hamiltonian_index;	// index for hamiltonian array
 	double totalCost;
 	
-	public GreedyApproximation(double [][] graph, int V) {
+	public GreedyApproximation_1005046(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
 		this.graph = graph;
 		this.V = V;
 		hamiltonian = new int[V+1];
 		hamiltonian_index = 0;
-		Prim prim = new Prim(graph,V);
+		Prim_1005046 prim = new Prim_1005046(graph,V);
 		printMST(prim.primMST());
 		
 	}
@@ -51,7 +51,7 @@ public class GreedyApproximation {
 			System.out.print(hamiltonian[i] + " ");
 		System.out.println();
 		totalCost = tspCost();
-		System.out.println("Cost: " + Main.two.format(totalCost));
+		System.out.println("Cost: " + Main_1005046.two.format(totalCost));
 
 	}
 	

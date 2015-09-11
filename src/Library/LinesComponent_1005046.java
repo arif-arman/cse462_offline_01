@@ -1,4 +1,4 @@
-package Graphs;
+package Library;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -14,7 +14,7 @@ import java.util.Scanner;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-public class LinesComponent extends JComponent {
+public class LinesComponent_1005046 extends JComponent {
 	
 	private static class Line {
 		final int x1;
