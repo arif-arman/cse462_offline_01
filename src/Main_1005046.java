@@ -116,6 +116,7 @@ public class Main_1005046 {
 				double gacost = 0;
 				System.out.println("--- Greedy Approximation ---");
 				elapsedTime = 0;
+				int [] mst = null;
 				int [] hamiltonian = null;
 				for(int k=0;k<3;k++) {
 					double startTime = System.nanoTime();				
@@ -124,6 +125,7 @@ public class Main_1005046 {
 					elapsedTime += (stopTime - startTime) / 1000000;
 					gacost += ga.getTotalCost();
 					System.out.println("Time : " + two.format(elapsedTime) + "ms");
+					mst = ga.getMST();
 					hamiltonian = ga.getHamiltonian();
 				}
 				elapsedTime /= 3;
@@ -132,7 +134,8 @@ public class Main_1005046 {
 				gapx.printf("%d \t %.4f\n", V, elapsedTime);
 			
 				ratio.printf("%.4f\t%.4f\n", bbcost, gacost);
-				drawGraph(X,Y,hamiltonian,V);
+				
+				drawGraph(X,Y,mst,hamiltonian,V);
 				//}
 				//userInput.close();
 				
@@ -162,7 +165,7 @@ public class Main_1005046 {
 		
 
 	}
-	static void drawGraph(double [] X, double [] Y, int [] hamiltonian, int V) {
+	static void drawGraph(double [] X, double [] Y, int [] mst, int [] hamiltonian, int V) {
 		JFrame testFrame = new JFrame("Graph with Number of Vertices: " + V);
 		testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		final LinesComponent_1005046 comp = new LinesComponent_1005046();
@@ -200,11 +203,12 @@ public class Main_1005046 {
 		dialog.setLocation(700, 0);
 		dialog.setVisible(true);
 		
-		//for(int i=0;i<V+1;i++) System.out.print(hamiltonian[i] + " ");
+		//for(int i=0;i<V+1;i++) System.out.print(mst[i] + " ");
+		comp.clearLines();
 		
-		for (int i = 0; i < V-1; i++) {
-			//System.out.println(X[hamiltonian[i]] + " " + Y[hamiltonian[i]] + " " + X[hamiltonian[i+1]] + " " + Y[hamiltonian[i+1]]);
-			comp.addLine((int)X[hamiltonian[i]], (int)Y[hamiltonian[i]], (int)X[hamiltonian[i+1]], (int)Y[hamiltonian[i+1]], Color.RED);
+		for (int i = 1; i < V; i++) {
+			//System.out.println(X[mst[i]] + " " + Y[mst[i]] + " " + X[mst[i+1]] + " " + Y[mst[i+1]]);
+			comp.addLine((int)X[mst[i]], (int)Y[mst[i]], (int)X[i], (int)Y[i], Color.RED);
 	
 		}
 		testFrame.pack();
@@ -213,6 +217,9 @@ public class Main_1005046 {
 		dialog = pane.createDialog(null, "Message");
 		dialog.setLocation(700, 0);
 		dialog.setVisible(true);
+		
+		comp.clearLines();
+		
 		for (int i = 0; i < V; i++) {
 			//System.out.println(X[hamiltonian[i]] + " " + Y[hamiltonian[i]] + " " + X[hamiltonian[i+1]] + " " + Y[hamiltonian[i+1]]);
 			comp.addLine((int)X[hamiltonian[i]], (int)Y[hamiltonian[i]], (int)X[hamiltonian[i+1]], (int)Y[hamiltonian[i+1]], Color.GREEN);

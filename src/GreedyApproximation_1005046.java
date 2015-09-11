@@ -5,6 +5,7 @@ public class GreedyApproximation_1005046 {
 	int[] hamiltonian;
 	int hamiltonian_index;	// index for hamiltonian array
 	double totalCost;
+	int [] mst;
 	
 	public GreedyApproximation_1005046(double [][] graph, int V) {
 		// TODO Auto-generated constructor stub
@@ -42,8 +43,9 @@ public class GreedyApproximation_1005046 {
 	
 	void printMST(int parent[]) {
 		//System.out.println("Edge Weight");
-		//for (int i = 1; i < V; i++)
-			//System.out.printf("%d - %d    %f \n", parent[i], i, graph[i][parent[i]]);
+		for (int i = 1; i < V; i++)
+			System.out.printf("%d - %d    %f \n", parent[i], i, graph[i][parent[i]]);
+		mst = parent;
 		preOrder(0, parent);
 		hamiltonian[hamiltonian_index] = 0;
 		System.out.println("--- TSP --- ");
@@ -59,6 +61,9 @@ public class GreedyApproximation_1005046 {
 		return totalCost;
 	}
 	
+	public int [] getMST() {
+		return mst;
+	}
 	public int [] getHamiltonian() {
 		return hamiltonian;
 	}
